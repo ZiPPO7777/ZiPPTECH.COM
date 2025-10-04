@@ -40,6 +40,14 @@
         width: 100%;
         max-width: 900px;
         min-height: 600px;
+        transition: all 0.6s ease;
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      .main-container.loaded {
+        opacity: 1;
+        transform: scale(1);
       }
 
       /* Left Side - Hero Section */
@@ -59,6 +67,12 @@
         background-size: cover;
         background-position: center;
         background-blend-mode: overlay;
+        transform: translateX(-100%);
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .hero-section.animate-in {
+        transform: translateX(0);
       }
 
       .hero-section::before {
@@ -80,6 +94,37 @@
         position: relative;
         z-index: 2;
         color: white;
+      }
+
+      /* Hero Content Animation */
+      .hero-content > * {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .hero-content-animate .logo-hero {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.4s;
+      }
+
+      .hero-content-animate .back-link {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.4s;
+      }
+
+      .hero-content-animate .hero-text {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.6s;
+      }
+
+      .hero-content-animate .progress-dots {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.8s;
       }
 
       .logo-hero {
@@ -145,6 +190,46 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        transform: translateX(100%);
+        transition: transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .form-section.animate-in {
+        transform: translateX(0);
+      }
+
+      /* Form Content Animation */
+      .form-header,
+      .login-form,
+      .divider,
+      .social-buttons {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+      }
+
+      .form-content-animate .form-header {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.2s;
+      }
+
+      .form-content-animate .login-form {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.4s;
+      }
+
+      .form-content-animate .divider {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.6s;
+      }
+
+      .form-content-animate .social-buttons {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.8s;
       }
 
       .form-header {
@@ -360,6 +445,12 @@
           min-height: 250px;
           padding: 30px 25px;
           order: 1;
+          transform: translateY(-100%);
+          transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .hero-section.animate-in {
+          transform: translateY(0);
         }
 
         .hero-title,
@@ -370,6 +461,12 @@
         .form-section {
           padding: 30px 25px;
           order: 2;
+          transform: translateY(100%);
+          transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .form-section.animate-in {
+          transform: translateY(0);
         }
 
         .form-title {
@@ -541,7 +638,7 @@
     </style>
   </head>
   <body>
-    <div class="main-container">
+    <div class="main-container" id="mainContainer">
       <!-- Left Side - Hero Section -->
       <div class="hero-section">
         <div class="hero-content">
@@ -569,7 +666,7 @@
         <div class="form-header">
           <h1 class="form-title">Welcome Back</h1>
           <p class="form-subtitle">
-            Don't have an account? <a href="#">Sign up here</a>
+            Don't have an account? <a href="{% url "userRegister" %}">Sign up here</a>
           </p>
         </div>
 
@@ -663,19 +760,30 @@
           submitBtn.disabled = true;
         });
 
-      // Smooth entrance animation
+      // Animation Sequence
       window.addEventListener("load", function () {
-        document.querySelector(".main-container").style.opacity = "0";
-        document.querySelector(".main-container").style.transform =
-          "translateY(20px)";
-        document.querySelector(".main-container").style.transition =
-          "all 0.6s ease";
+        // Start main container animation immediately
+        const mainContainer = document.getElementById("mainContainer");
+        mainContainer.classList.add("loaded");
 
+        // Trigger section animations with slight delay
         setTimeout(() => {
-          document.querySelector(".main-container").style.opacity = "1";
-          document.querySelector(".main-container").style.transform =
-            "translateY(0)";
-        }, 100);
+          const heroSection = document.querySelector(".hero-section");
+          const formSection = document.querySelector(".form-section");
+
+          heroSection.classList.add("animate-in");
+          formSection.classList.add("animate-in");
+
+          // Animate content after sections slide in
+          setTimeout(() => {
+            document
+              .querySelector(".hero-content")
+              .classList.add("hero-content-animate");
+            document
+              .querySelector(".form-section")
+              .classList.add("form-content-animate");
+          }, 600);
+        }, 200);
       });
     </script>
   </body>

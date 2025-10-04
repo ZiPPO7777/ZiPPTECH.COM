@@ -1,0 +1,680 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - ZiPPTECH Blog</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #6b7280;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      .main-container {
+        background: #374151;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        max-width: 750px;
+        min-height: 520px;
+        transition: all 0.6s ease;
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      .main-container.loaded {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Left Side - Hero Section */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #7c3aed 50%,
+          #6366f1 100%
+        );
+        position: relative;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-image: url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80");
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: overlay;
+        transform: translateX(-100%);
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .hero-section.animate-in {
+        transform: translateX(0);
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.8) 0%,
+          rgba(124, 58, 237, 0.8) 100%
+        );
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+      }
+
+      /* Hero Content Animation */
+      .hero-content > * {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .hero-content-animate .logo-hero {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.4s;
+      }
+
+      .hero-content-animate .back-link {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.4s;
+      }
+
+      .hero-content-animate .hero-text {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.6s;
+      }
+
+      .hero-content-animate .progress-dots {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.8s;
+      }
+
+      .logo-hero {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: auto;
+      }
+
+      .back-link {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: white;
+      }
+
+      .hero-text {
+        margin-top: auto;
+        margin-bottom: 2rem;
+      }
+
+      .hero-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .progress-dots {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .dot.active {
+        background: white;
+        width: 24px;
+        border-radius: 4px;
+      }
+
+      /* Right Side - Form Section */
+      .form-section {
+        background: #374151;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        transform: translateX(100%);
+        transition: transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .form-section.animate-in {
+        transform: translateX(0);
+      }
+
+      /* Form Content Animation */
+      .form-header,
+      .register-form,
+      .divider,
+      .social-buttons {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+      }
+
+      .form-content-animate .form-header {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.2s;
+      }
+
+      .form-content-animate .register-form {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.4s;
+      }
+
+      .form-content-animate .divider {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.6s;
+      }
+
+      .form-content-animate .social-buttons {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.8s;
+      }
+
+      .form-header {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-subtitle {
+        color: #9ca3af;
+        font-size: 0.9rem;
+      }
+
+      .form-subtitle a {
+        color: #8b5cf6;
+        text-decoration: none;
+      }
+
+      .form-subtitle a:hover {
+        text-decoration: underline;
+      }
+
+      .register-form {
+        margin-bottom: 2rem;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .form-control {
+        width: 100%;
+        height: 44px;
+        background: #4b5563;
+        border: 1px solid #6b7280;
+        border-radius: 6px;
+        padding: 0 0.875rem;
+        font-size: 0.875rem;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .form-control::placeholder {
+        color: #9ca3af;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      }
+
+      .password-wrapper {
+        position: relative;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        padding: 0.25rem;
+      }
+
+      .password-toggle:hover {
+        color: #8b5cf6;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .checkbox {
+        width: 18px;
+        height: 18px;
+        background: #4b5563;
+        border: 1px solid #6b7280;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .checkbox:checked {
+        background: #8b5cf6;
+        border-color: #8b5cf6;
+      }
+
+      .checkbox-label {
+        color: #9ca3af;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      .checkbox-label a {
+        color: #8b5cf6;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        width: 100%;
+        height: 44px;
+        background: #8b5cf6;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 1.25rem;
+      }
+
+      .btn-primary:hover {
+        background: #7c3aed;
+        transform: translateY(-1px);
+      }
+
+      .divider {
+        text-align: center;
+        margin: 1.5rem 0;
+        position: relative;
+        color: #9ca3af;
+        font-size: 0.85rem;
+      }
+
+      .divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #4b5563;
+      }
+
+      .divider span {
+        background: #374151;
+        padding: 0 1rem;
+      }
+
+      .social-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .btn-social {
+        height: 44px;
+        background: #4b5563;
+        border: 1px solid #6b7280;
+        border-radius: 6px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .btn-social:hover {
+        background: #5b6472;
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      .btn-social i {
+        font-size: 1.1rem;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .main-container {
+          max-width: 700px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+          align-items: flex-start;
+          padding-top: 1rem;
+        }
+
+        .main-container {
+          grid-template-columns: 1fr;
+          max-width: 100%;
+          min-height: auto;
+          border-radius: 12px;
+        }
+
+        .hero-section {
+          min-height: 200px;
+          padding: 25px 20px;
+          order: 1;
+          transform: translateY(-100%);
+          transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .hero-section.animate-in {
+          transform: translateY(0);
+        }
+
+        .logo-hero {
+          font-size: 1.5rem;
+        }
+
+        .hero-title,
+        .hero-subtitle {
+          font-size: 1.6rem;
+        }
+
+        .form-section {
+          padding: 25px 20px;
+          order: 2;
+          transform: translateY(100%);
+          transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .form-section.animate-in {
+          transform: translateY(0);
+        }
+
+        .form-title {
+          font-size: 1.5rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+          gap: 0.75rem;
+        }
+
+        .social-buttons {
+          grid-template-columns: 1fr;
+          gap: 0.75rem;
+        }
+
+        .form-control,
+        .btn-primary,
+        .btn-social {
+          height: 42px;
+        }
+      }
+
+      // ... existing code for other responsive breakpoints ...
+    </style>
+  </head>
+  <body>
+    <div class="main-container" id="mainContainer">
+      <!-- Left Side - Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="logo-hero">ZiPPTECH</div>
+          <a href="#" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to website
+          </a>
+
+          <div class="hero-text">
+            <div class="hero-title">Join Our</div>
+            <div class="hero-subtitle">Community</div>
+          </div>
+
+          <div class="progress-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side - Form Section -->
+      <div class="form-section">
+        <div class="form-header">
+          <h1 class="form-title">Create an account</h1>
+          <p class="form-subtitle">
+            Already have an account? <a href="{% url "userLogin" %}">Sign in</a>
+          </p>
+        </div>
+
+        <form class="register-form" method="POST" action="#">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <input
+              type="text"
+              class="form-control"
+              name="first_name"
+              placeholder="First name"
+              required
+            />
+            <input
+              type="text"
+              class="form-control"
+              name="last_name"
+              placeholder="Last name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              type="email"
+              class="form-control"
+              name="email"
+              placeholder="Email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              name="username"
+              placeholder="Username"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <div class="password-wrapper">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword()"
+              >
+                <i class="fas fa-eye" id="password-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="checkbox-group">
+            <input
+              type="checkbox"
+              class="checkbox"
+              id="terms"
+              name="terms"
+              required
+            />
+            <label for="terms" class="checkbox-label">
+              I agree to the <a href="#">Terms & Conditions</a>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-primary">Create account</button>
+        </form>
+
+        <div class="divider">
+          <span>Or register with</span>
+        </div>
+
+        <div class="social-buttons">
+          <button type="button" class="btn-social">
+            <i class="fab fa-google"></i>
+            Google
+          </button>
+          <button type="button" class="btn-social">
+            <i class="fab fa-github"></i>
+            GitHub
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Animation Sequence
+      window.addEventListener("load", function () {
+        // Start main container animation immediately
+        const mainContainer = document.getElementById("mainContainer");
+        mainContainer.classList.add("loaded");
+
+        // Trigger section animations with slight delay
+        setTimeout(() => {
+          const heroSection = document.querySelector(".hero-section");
+          const formSection = document.querySelector(".form-section");
+
+          heroSection.classList.add("animate-in");
+          formSection.classList.add("animate-in");
+
+          // Animate content after sections slide in
+          setTimeout(() => {
+            document
+              .querySelector(".hero-content")
+              .classList.add("hero-content-animate");
+            document
+              .querySelector(".form-section")
+              .classList.add("form-content-animate");
+          }, 600);
+        }, 200);
+      });
+
+      function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const passwordIcon = document.getElementById("password-icon");
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          passwordIcon.classList.remove("fa-eye");
+          passwordIcon.classList.add("fa-eye-slash");
+        } else {
+          passwordInput.type = "password";
+          passwordIcon.classList.remove("fa-eye-slash");
+          passwordIcon.classList.add("fa-eye");
+        }
+      }
+
+      // Form submission with loading state
+      document
+        .querySelector(".register-form")
+        .addEventListener("submit", function (e) {
+          const submitBtn = document.querySelector(".btn-primary");
+          submitBtn.innerHTML = "Creating Account...";
+          submitBtn.disabled = true;
+        });
+    </script>
+  </body>
+</html>

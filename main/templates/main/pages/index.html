@@ -1,18 +1,914 @@
-{% extends "main/includes/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZiPPTECH - Tech Blog & Innovation Hub</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      body {
+        font-family: "Inter", sans-serif;
+        background: #111827;
+        color: #f9fafb;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
 
-{% block title %}
-Home
-{% endblock title %}
+      /* Navigation */
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #374151;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
 
-{% block content %}
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-<h1>hello</h1>
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #8b5cf6;
+        text-decoration: none;
+      }
 
- <a href="{% url "userLogin" %}"><button>Login</button></a>
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
 
-{% endblock content %}
+      .nav-links a {
+        color: #d1d5db;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
 
+      .nav-links a:hover {
+        color: #8b5cf6;
+      }
 
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+      }
 
+      .btn-auth {
+        padding: 0.5rem 1.5rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
 
+      .btn-login {
+        color: #d1d5db;
+        border: 1px solid #374151;
+      }
+
+      .btn-login:hover {
+        background: #374151;
+        color: white;
+      }
+
+      .btn-signup {
+        background: #8b5cf6;
+        color: white;
+      }
+
+      .btn-signup:hover {
+        background: #7c3aed;
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23374151" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.5;
+      }
+
+      .hero-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 2;
+        text-align: center;
+      }
+
+      .hero-content {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 1s ease forwards;
+      }
+
+      .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.2;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: #9ca3af;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        padding: 1rem 2rem;
+        background: #8b5cf6;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary:hover {
+        background: #7c3aed;
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        padding: 1rem 2rem;
+        border: 1px solid #374151;
+        color: #d1d5db;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+        background: #374151;
+        color: white;
+      }
+
+      /* Section Styles */
+      .section {
+        padding: 5rem 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #f9fafb;
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+        color: #9ca3af;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* About Section */
+      .about {
+        background: #1f2937;
+      }
+
+      .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .about-text {
+        font-size: 1.125rem;
+        color: #d1d5db;
+        line-height: 1.8;
+      }
+
+      .about-text h3 {
+        color: #8b5cf6;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .about-features {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background: #374151;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+        color: #8b5cf6;
+        margin-bottom: 1rem;
+      }
+
+      .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-desc {
+        color: #9ca3af;
+        font-size: 0.9rem;
+      }
+
+      /* Projects Section */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+      }
+
+      .project-card {
+        background: #374151;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .project-image {
+        height: 200px;
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: white;
+      }
+
+      .project-content {
+        padding: 1.5rem;
+      }
+
+      .project-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .project-desc {
+        color: #9ca3af;
+        margin-bottom: 1rem;
+      }
+
+      .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .tech-tag {
+        background: #4b5563;
+        color: #d1d5db;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+      }
+
+      .project-links {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .project-link {
+        color: #8b5cf6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .project-link:hover {
+        color: #7c3aed;
+      }
+
+      /* Blog Section */
+      .blog {
+        background: #1f2937;
+      }
+
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .blog-card {
+        background: #374151;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .blog-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .blog-image {
+        height: 180px;
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: white;
+      }
+
+      .blog-content {
+        padding: 1.5rem;
+      }
+
+      .blog-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        color: #9ca3af;
+      }
+
+      .blog-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .blog-excerpt {
+        color: #9ca3af;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .read-more {
+        color: #8b5cf6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .read-more:hover {
+        color: #7c3aed;
+      }
+
+      /* Contact Section */
+      .contact {
+        background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      }
+
+      .contact-content {
+        text-align: center;
+      }
+
+      .contact-info {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #d1d5db;
+      }
+
+      .contact-icon {
+        font-size: 1.25rem;
+        color: #8b5cf6;
+      }
+
+      /* Footer */
+      .footer {
+        background: #111827;
+        border-top: 1px solid #374151;
+        padding: 2rem 0;
+        text-align: center;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .social-link {
+        color: #9ca3af;
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+      }
+
+      .social-link:hover {
+        color: #8b5cf6;
+      }
+
+      .copyright {
+        color: #6b7280;
+        font-size: 0.875rem;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease;
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Mobile Menu */
+      .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: #d1d5db;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .mobile-menu-toggle {
+          display: block;
+        }
+
+        .hero-title {
+          font-size: 2.5rem;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .about-content {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .about-features {
+          grid-template-columns: 1fr;
+        }
+
+        .contact-info {
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .container {
+          padding: 0 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 2rem;
+        }
+
+        .projects-grid,
+        .blog-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo">ZiPPTECH</a>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <a href="{% url 'userLogin' %}" class="btn-auth btn-login">Login</a>
+          <a href="{% url 'userRegister' %}" class="btn-auth btn-signup"
+            >Sign Up</a
+          >
+        </div>
+        <button class="mobile-menu-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h1 class="hero-title">ZiPPTECH</h1>
+          <p class="hero-subtitle">
+            Sharing our journey, goals, and vision in tech. Explore our
+            projects, tutorials, and insights as we build the future together.
+          </p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn-primary">
+              <i class="fas fa-rocket"></i>
+              Explore Projects
+            </a>
+            <a href="#blog" class="btn-secondary">Read Our Blog</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about" id="about">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">About ZiPPTECH</h2>
+          <p class="section-subtitle">
+            We're passionate developers sharing our journey and knowledge with
+            the tech community
+          </p>
+        </div>
+        <div class="about-content">
+          <div class="about-text fade-in">
+            <h3>Our Mission</h3>
+            <p>
+              At ZiPPTECH, we believe in the power of sharing knowledge and
+              building together. This platform serves as our digital hub where
+              we document our projects, share tutorials, and discuss our vision
+              for the future of technology.
+            </p>
+            <br />
+            <p>
+              Whether you're a fellow developer, tech enthusiast, or someone
+              curious about our work, you'll find valuable insights, project
+              showcases, and learning resources here.
+            </p>
+          </div>
+          <div class="about-features fade-in">
+            <div class="feature-card">
+              <i class="fas fa-code feature-icon"></i>
+              <h4 class="feature-title">Development</h4>
+              <p class="feature-desc">
+                Building innovative solutions and sharing our code
+              </p>
+            </div>
+            <div class="feature-card">
+              <i class="fas fa-graduation-cap feature-icon"></i>
+              <h4 class="feature-title">Tutorials</h4>
+              <p class="feature-desc">
+                Step-by-step guides and learning resources
+              </p>
+            </div>
+            <div class="feature-card">
+              <i class="fas fa-lightbulb feature-icon"></i>
+              <h4 class="feature-title">Innovation</h4>
+              <p class="feature-desc">Exploring new technologies and ideas</p>
+            </div>
+            <div class="feature-card">
+              <i class="fas fa-users feature-icon"></i>
+              <h4 class="feature-title">Community</h4>
+              <p class="feature-desc">Building connections in the tech world</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Featured Projects</h2>
+          <p class="section-subtitle">
+            Discover our current and upcoming projects that we're passionate
+            about
+          </p>
+        </div>
+        <div class="projects-grid">
+          <div class="project-card fade-in">
+            <div class="project-image">
+              <i class="fas fa-blog"></i>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">ZiPPTECH Blog Platform</h3>
+              <p class="project-desc">
+                Our main platform built with Django, featuring modern design and
+                responsive layout.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">Django</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">HTML/CSS</span>
+                <span class="tech-tag">JavaScript</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">View Live</a>
+                <a href="#" class="project-link">GitHub</a>
+              </div>
+            </div>
+          </div>
+          <div class="project-card fade-in">
+            <div class="project-image">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">Mobile App Development</h3>
+              <p class="project-desc">
+                Cross-platform mobile applications with modern UI/UX design
+                principles.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">React Native</span>
+                <span class="tech-tag">Flutter</span>
+                <span class="tech-tag">Firebase</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">Coming Soon</a>
+              </div>
+            </div>
+          </div>
+          <div class="project-card fade-in">
+            <div class="project-image">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="project-content">
+              <h3 class="project-title">AI Integration Tools</h3>
+              <p class="project-desc">
+                Exploring artificial intelligence and machine learning
+                applications.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">TensorFlow</span>
+                <span class="tech-tag">OpenAI</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">In Development</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="section blog" id="blog">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Latest Blog Posts</h2>
+          <p class="section-subtitle">
+            Stay updated with our latest thoughts, tutorials, and tech insights
+          </p>
+        </div>
+        <div class="blog-grid">
+          <article class="blog-card fade-in">
+            <div class="blog-image">
+              <i class="fas fa-code"></i>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span>Dec 2024</span>
+                <span>5 min read</span>
+              </div>
+              <h3 class="blog-title">
+                Getting Started with Django Development
+              </h3>
+              <p class="blog-excerpt">
+                A comprehensive guide to building web applications with Django
+                framework...
+              </p>
+              <a href="#" class="read-more">Read More →</a>
+            </div>
+          </article>
+          <article class="blog-card fade-in">
+            <div class="blog-image">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span>Nov 2024</span>
+                <span>8 min read</span>
+              </div>
+              <h3 class="blog-title">Modern Web Design Principles</h3>
+              <p class="blog-excerpt">
+                Exploring the latest trends in web design and user experience...
+              </p>
+              <a href="#" class="read-more">Read More →</a>
+            </div>
+          </article>
+          <article class="blog-card fade-in">
+            <div class="blog-image">
+              <i class="fas fa-database"></i>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span>Nov 2024</span>
+                <span>6 min read</span>
+              </div>
+              <h3 class="blog-title">Database Optimization Techniques</h3>
+              <p class="blog-excerpt">
+                Tips and tricks for improving database performance in web
+                applications...
+              </p>
+              <a href="#" class="read-more">Read More →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="contact">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Get In Touch</h2>
+          <p class="section-subtitle">
+            Have questions, ideas, or want to collaborate? We'd love to hear
+            from you!
+          </p>
+        </div>
+        <div class="contact-content fade-in">
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fas fa-envelope contact-icon"></i>
+              <span>iamrealzippo@gmail.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt contact-icon"></i>
+              <span>India</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-globe contact-icon"></i>
+              <span>ZiPPTECH.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="copyright">
+          © 2024 ZiPPTECH. All rights reserved. Built with passion for
+          technology.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Fade in animation on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".fade-in").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Navbar background on scroll
+      window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 100) {
+          navbar.style.background = "rgba(17, 24, 39, 0.98)";
+        } else {
+          navbar.style.background = "rgba(17, 24, 39, 0.95)";
+        }
+      });
+    </script>
+  </body>
+</html>
